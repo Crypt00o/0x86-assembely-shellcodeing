@@ -1,4 +1,4 @@
-# 0x86-assembely-shelldoeing-
+# 0x86-assembely-shellcodeing
 
 exploitation with assembly shellcodeing and i write a tool to out shellcodeing 
 
