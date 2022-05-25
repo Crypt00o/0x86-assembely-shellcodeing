@@ -1,7 +1,5 @@
 #!/bin/bash
 
-
-
 #########################################################################
 #  shellcode.sh is written by 0xCrypt00o                                #
 #  take input as <filename.asm> and compile                             #
@@ -12,6 +10,9 @@
 #  example: ./shellcode.sh shell.asm                                    #
 #  example to write it in c file : ./shellcode.sh shell.asm c           #
 #########################################################################
+
+echo "[+] ShellCoder Tool To Genrate shellcode with nasm and gnu ld "
+echo "[+] Created And Developed By 0xCrypt00o 'Eslam Mohamed ' "
 
 
 
@@ -49,17 +50,27 @@ if [ -e $file  ]
 then
 echo "[+] Successed "
 echo "[+] ShellCode is : "
-
-objdump -d ./$file.o | grep -Po '\s\K[a-f0-9]{2}(?=\s)' | sed 's/^/\\x/g' | perl -pe 's/\r?\n//' | sed 's/$/\n/'
+objdump -d $file.o | grep -Po '\s\K[a-f0-9]{2}(?=\s)' | sed 's/^/\\x/g' | perl -pe 's/\r?\n//' | sed 's/$/\n/' > $file.txt
+shellcode=$(cat $file.txt)
+#echo  $shellcode
+nullbyte=$(echo $shellcode | grep --color='auto' '00')
+if [ ! -z $nullbyte ]
+then
+printf "\n"
+echo "[-] Warning Null Byte Was Found "
+echo $shellcode | sed -s 's/00/00"here"/g'
+else
+printf "\n"
+echo $shellcode
+fi
 if [ -z $2 ]
-then 
+then
+rm $file.txt
 exit
 else
 yes=c
 if [ $2 == $yes ]
 then
-objdump -d $file.o | grep -Po '\s\K[a-f0-9]{2}(?=\s)' | sed 's/^/\\x/g' | perl -pe 's/\r?\n//' | sed 's/$/\n/' > $file.txt
-shellcode=$(cat $file.txt)
 
 printf "\n [+] Writing shellCode as %s.c ready for injection \n" $file
 
@@ -71,11 +82,13 @@ char shellcode[]="%s";
 
 int (*execshell)();
 execshell=(int(*)()) shellcode;
-
+int execrightnow=execshell();
 }
 
 
 ' $shellcode  > $file.c
+rm $file.txt
+printf "\n\n\n[+] Compile C Program with : i686-linux-gnu-gcc -m32 -z execstack %s.c -o file\n " $file
 exit
 fi
 fi
