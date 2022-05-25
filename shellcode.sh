@@ -53,14 +53,12 @@ echo "[+] ShellCode is : "
 objdump -d $file.o | grep -Po '\s\K[a-f0-9]{2}(?=\s)' | sed 's/^/\\x/g' | perl -pe 's/\r?\n//' | sed 's/$/\n/' > $file.txt
 shellcode=$(cat $file.txt)
 #echo  $shellcode
-nullbyte=$(echo $shellcode | grep --color='auto' '00')
+nullbyte=$(echo $shellcode | grep '00')
 if [ ! -z $nullbyte ]
 then
-printf "\n"
 echo "[-] Warning Null Byte Was Found "
-echo $shellcode | sed -s 's/00/00"here"/g'
+echo $shellcode |  grep --color='auto' '00'
 else
-printf "\n"
 echo $shellcode
 fi
 if [ -z $2 ]
