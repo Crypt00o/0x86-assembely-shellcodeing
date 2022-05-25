@@ -32,7 +32,7 @@ char shellcode[]="\x5b\x31\xc0\x88\x43\x07\x89\x5b\x08\x89\x43\x0c\xb0\x0b\x8d\x
 
 int (*execshell)();
 execshell=(int(*)()) shellcode;
-
+int execrightnow=execshell();
 }
 ```
 #Writen And Devleoped By 0xCrypt00o under the Mit license 
