@@ -1,6 +1,6 @@
 # 0x86-assembely-shellcodeing
 
-exploitation with assembly shellcodeing and i write a tool to out shellcodeing 
+exploitation with assembly shellcodeing and i write a tool to out shellcodeing and checking for null bytes
 
 
 #Usage
